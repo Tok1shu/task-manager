@@ -22,3 +22,11 @@ SOURCES.md   Журнал источников и использования И�
 ## Документация
 Подробные требования и спецификация проекта доступны в файле [TASK.md](TASK.md).
 Источники и учёт использования ИИ — в файле [SOURCES.md](SOURCES.md).
+
+## Запуск через Docker
+```bash
+cp .env.example .env          # заполнить значения
+docker compose up --build     # PostgreSQL + backend на http://localhost:8000
+docker compose --profile frontend up --build   # плюс фронтенд на http://localhost:5173 (когда он создан)
+```
+Контракт API — [backend/ROUTES.md](backend/ROUTES.md). Правила для фронтенда — [frontend/CLAUDE.md](frontend/CLAUDE.md).

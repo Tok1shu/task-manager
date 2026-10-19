@@ -12,7 +12,34 @@
   Co-authored-by: Zyabra <agent@lazurite.cc>
   ```
 * Коммиты **без** этого соавтора написаны и зафиксированы автором вручную.
-* Бэкенд-код разрабатывается автором проекта самостоятельно.
+* Код, относящийся к темам уроков ITSTEP (см. таблицу ниже), разрабатывается автором проекта самостоятельно.
+* То, чего в уроках нет (Docker, JWT-сессии с refresh-cookie, фронтенд на React, документация), делается с помощью ИИ и помечается трейлером выше.
+
+## 📖 Граница: что есть в курсе ITSTEP, а чего нет
+
+Источник — [fullt1lt/CoursesPython](https://github.com/fullt1lt/CoursesPython) (проверено 2026-10-19). «Есть» — тема разобрана в лекции, пишется вручную. «Нет» или «только упомянуто» — можно делать с ИИ.
+
+| Тема | В курсе | Где |
+|---|---|---|
+| Виртуальное окружение, `pip`, `requirements.txt` | есть | lesson20 |
+| Django: проект, приложения, шаблоны, `settings`/`urls` | есть | lesson22, 23 |
+| Модели, связи, PostgreSQL (`psycopg`), `Meta`, ограничения | есть | lesson24 |
+| ORM: `QuerySet`, `Q`, `annotate`/`aggregate`, `select_related`, транзакции | есть | lesson25 |
+| Формы, `AbstractUser`, `UserCreationForm`, `authenticate`/`login`, `@login_required` | есть | lesson26 |
+| CBV, `LoginView`, пагинация | есть | lesson27 |
+| Сессии, куки, кеш | есть | lesson28 |
+| Middleware, signals, messages | есть | lesson29 |
+| DRF: сериализаторы, `APIView`, `ViewSet`, роутеры, пагинация | есть | lesson30, 31 |
+| DRF: `permissions`, `django-filter`, поиск и сортировка | есть | lesson32 |
+| Тесты Django и DRF: `TestCase`, `APIClient`, `FactoryBoy` | есть | lesson15, 33 |
+| JWT | только базовая настройка `simplejwt` (`token/`, `token/refresh/`), ~60 строк | lesson32 |
+| Ротация refresh, чёрный список, `HttpOnly`-cookie, throttling | нет | — |
+| Docker, `docker compose` | нет (одна команда для Redis) | lesson28 |
+| `.env`, `django-environ` / `python-dotenv`, gunicorn, nginx как прокси | нет | — |
+| CORS, OpenAPI/Swagger | нет | — |
+| React / Vue | только упоминание | lesson22, 30, 31 |
+
+Условия ТЗ ([TASK.md](TASK.md)) разрешают ИИ для HTML/CSS/JS; расширение на остальные темы вне уроков — решение автора проекта, согласуется с преподавателем.
 
 ---
 
@@ -55,6 +82,10 @@
 * **Инструмент:** Zyabra (Claude Code)
   * **Задача:** Отказ от гексагональной архитектуры в пользу Package by feature; правка `README.md`; переработка issue [#1](https://github.com/Tok1shu/task-manager/issues/1); создание ветки `feat/backend`.
   * **Результат:** Обновлены `README.md` и `SOURCES.md`, issue #1 переименован в «Структура проекта по принципу Package by feature».
+
+* **Инструмент:** Zyabra (Claude Code)
+  * **Задача:** Проектирование контракта API (`backend/ROUTES.md`), Docker-инфраструктура (корневой `docker-compose.yml`, `backend/Dockerfile`, `frontend/Dockerfile`), правила фронтенда (`frontend/CLAUDE.md`), таблица границ ИИ.
+  * **Результат:** Документы и конфигурация без кода приложения; принципы структуры фронтенда взяты из собственного проекта автора (LRP): package by feature, слои `app → features → shared`, запросы только через api-модули и хуки.
 
 #### 📚 Документация и материалы
 * Курс лекций по Python и Django, по которому строится проект: [fullt1lt/CoursesPython](https://github.com/fullt1lt/CoursesPython) — виртуальные окружения и `pip` ([lesson20](https://github.com/fullt1lt/CoursesPython/blob/main/lesson20.md)), `django-admin startproject` / `startapp` ([lesson22](https://github.com/fullt1lt/CoursesPython/blob/main/lesson22.md)), подключение PostgreSQL через `psycopg` ([lesson24](https://github.com/fullt1lt/CoursesPython/blob/main/lesson24.md)).
