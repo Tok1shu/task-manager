@@ -49,3 +49,12 @@
 #### 📚 Документация и материалы
 * Официальное ТЗ дипломного проекта: [TASK.md](TASK.md) (STEP IT ACADEMY Praha).
 * Python `typing.Protocol` — [Structural Subtyping (PEP 544)](https://peps.python.org/pep-0544/).
+
+### [2026-10-19]
+#### 🤖 ИИ-ассистенты
+* **Инструмент:** Zyabra (Claude Code)
+  * **Задача:** Отказ от гексагональной архитектуры в пользу Package by feature; правка `README.md`; переработка issue [#1](https://github.com/Tok1shu/task-manager/issues/1); создание ветки `feat/backend`.
+  * **Результат:** Обновлены `README.md` и `SOURCES.md`, issue #1 переименован в «Структура проекта по принципу Package by feature».
+
+#### 📚 Документация и материалы
+* Курс лекций по Python и Django, по которому строится проект: [fullt1lt/CoursesPython](https://github.com/fullt1lt/CoursesPython) — виртуальные окружения и `pip` ([lesson20](https://github.com/fullt1lt/CoursesPython/blob/main/lesson20.md)), `django-admin startproject` / `startapp` ([lesson22](https://github.com/fullt1lt/CoursesPython/blob/main/lesson22.md)), подключение PostgreSQL через `psycopg` ([lesson24](https://github.com/fullt1lt/CoursesPython/blob/main/lesson24.md)).
