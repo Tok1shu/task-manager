@@ -41,6 +41,7 @@ src/
 - Запросы живут в `features/<name>/api/`: функции + хуки (`useProjects`, `useCreateTask`…). Компоненты вызывают только хуки.
 - Ключи кеша — в одном месте на фичу (`projectKeys.list()`, `projectKeys.detail(id)`), после мутации инвалидируем нужные ключи.
 - Типы ответов — рядом с api-модулем и в точности по `ROUTES.md`. Без `any`.
+- Идентификаторы сущностей — UUID-строки (правка от Tokishu, см. «Журнал правок» в `ROUTES.md`). Тип — `string`, не `number`; не парсить и не сравнивать как числа. Чтобы не перепутать `projectId` и `taskId`, в `shared/api/ids.ts` заведены «брендированные» типы (`ProjectId`, `TaskId`, `CommentId`, `UserId` = `string & { __brand }`), в маршрутах параметры называются `:projectId`, `:taskId`.
 - Статусы и приоритеты (`todo|in_progress|done`, `low|medium|high`) — константы и подписи в `constants`, не строки по коду.
 
 ## UI
