@@ -1,5 +1,5 @@
 from django.core.cache import cache
-from rest_framework.test import APITestCase
+from rest_framework.test import APIClient, APITestCase
 
 from .models import User
 
@@ -7,6 +7,8 @@ PASSWORD = 'MyPassword2008!'
 
 
 class AuthTests(APITestCase):
+    client: APIClient
+
     def setUp(self):
         cache.clear()
 
@@ -59,6 +61,8 @@ class AuthTests(APITestCase):
 
 
 class ProfileTests(APITestCase):
+    client: APIClient
+
     def setUp(self):
         self.user = User.objects.create_user('tokishu', 'tokishu@lazurite.cc', PASSWORD)
         self.other = User.objects.create_user('petr', 'petr@example.com', PASSWORD)
