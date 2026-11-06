@@ -1,7 +1,9 @@
 from django.conf import settings
 from django.contrib.auth import authenticate
+from django.db.models import Q
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.throttling import ScopedRateThrottle
@@ -11,10 +13,6 @@ from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from .serializers import ProfileSerializer, RegisterSerializer
-
-
-def not_implemented():
-    return Response({"detail": "Not implemented"}, status=status.HTTP_501_NOT_IMPLEMENTED)
 
 
 def set_refresh_cookie(response, token):
@@ -128,4 +126,27 @@ class MeView(APIView):
 
 class MyTasksView(APIView):
     def get(self, request, **kwargs):
-        return not_implemented()
+        from projects.models import Project
+        from tasks.models import Task
+        from tasks.serializers import MyTaskSerializer
+        from tasks.views import apply_task_filters, apply_task_ordering
+
+        user_projects = Project.objects.filter(
+            Q(owner=request.user) | Q(members=request.user)
+        ).values_list('id', flat=True)
+
+        tasks = Task.objects.filter(
+            assignee=request.user,
+            project_id__in=user_projects,
+        ).select_related('project', 'author', 'assignee')
+
+        tasks = apply_task_filters(tasks, request.query_params)
+        tasks = apply_task_ordering(tasks, request.query_params.get('ordering', '-created_at'))
+
+        paginator = PageNumberPagination()
+        page = paginator.paginate_queryset(tasks, request)
+        if page is not None:
+            serializer = MyTaskSerializer(page, many=True, context={'request': request})
+            return paginator.get_paginated_response(serializer.data)
+        serializer = MyTaskSerializer(tasks, many=True, context={'request': request})
+        return Response(serializer.data)
