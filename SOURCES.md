@@ -86,6 +86,9 @@
 * **Инструмент:** Zyabra (Claude Code)
   * **Задача:** Проектирование контракта API (`backend/ROUTES.md`), Docker-инфраструктура (корневой `docker-compose.yml`, `backend/Dockerfile`, `frontend/Dockerfile`), правила фронтенда (`frontend/CLAUDE.md`), таблица границ ИИ.
   * **Результат:** Документы и конфигурация без кода приложения; принципы структуры фронтенда взяты из собственного проекта автора (LRP): package by feature, слои `app → features → shared`, запросы только через api-модули и хуки.
+* **Инструмент:** Zyabra (Claude Code)
+  * **Задача:** Фронтенд (разрешён ТЗ: HTML/CSS/JS): React + TypeScript + Vite, экраны входа, регистрации, профиля, проектов, задач, комментариев, «Моих задач»; цветовая схема из LRP; эмулятор бэкенда `frontend/mock` по контракту `ROUTES.md`; тесты Vitest.
+  * **Результат:** Ветка `feat/frontend`, проверки `npm run check` проходят; приложение запускается с эмулятором без бэкенда.
 
 #### 📚 Документация и материалы
 * Курс лекций по Python и Django, по которому строится проект: [fullt1lt/CoursesPython](https://github.com/fullt1lt/CoursesPython) — виртуальные окружения и `pip` ([lesson20](https://github.com/fullt1lt/CoursesPython/blob/main/lesson20.md)), `django-admin startproject` / `startapp` ([lesson22](https://github.com/fullt1lt/CoursesPython/blob/main/lesson22.md)), подключение PostgreSQL через `psycopg` ([lesson24](https://github.com/fullt1lt/CoursesPython/blob/main/lesson24.md)).

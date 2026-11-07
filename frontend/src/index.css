@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+/* Цветовая схема взята из LRP (LocalRP): тёмные поверхности, акцент emerald. */
+@theme {
+  --color-accent-50: oklch(97.9% 0.021 166.113);
+  --color-accent-100: oklch(95% 0.052 163.051);
+  --color-accent-200: oklch(90.5% 0.093 164.15);
+  --color-accent-300: oklch(84.5% 0.143 164.978);
+  --color-accent-400: oklch(76.5% 0.177 163.223);
+  --color-accent-500: oklch(69.6% 0.17 162.48);
+  --color-accent-600: oklch(59.6% 0.145 163.225);
+  --color-accent-700: oklch(50.8% 0.118 165.612);
+  --color-accent-800: oklch(43.2% 0.095 166.913);
+  --color-accent-900: oklch(37.8% 0.077 168.94);
+  --color-accent-950: oklch(26.2% 0.051 172.552);
+  --color-danger-300: oklch(81% 0.117 11.638);
+  --color-danger-400: oklch(71.2% 0.194 13.428);
+  --color-danger-500: oklch(64.5% 0.246 16.439);
+  --color-danger-600: oklch(58.6% 0.253 17.585);
+  --color-danger-700: oklch(51.4% 0.222 16.935);
+  --color-danger-950: oklch(27.1% 0.105 12.094);
+  --color-warning-300: oklch(87.9% 0.169 91.605);
+  --color-warning-400: oklch(82.8% 0.189 84.429);
+  --color-warning-500: oklch(76.9% 0.188 70.08);
+  --color-warning-950: oklch(27.9% 0.077 45.635);
+  --color-info-400: oklch(70.7% 0.165 254.624);
+
+  /* текст на тёмных поверхностях */
+  --color-bright: oklch(97% 0 none);
+  --color-strong: oklch(92.2% 0 none);
+  --color-secondary: oklch(87% 0 none);
+  --color-subtle: oklch(70.8% 0 none);
+  --color-faint: oklch(55.6% 0 none);
+  --color-disabled: oklch(43.9% 0 none);
+  --color-muted: #999999;
+  --color-primary: #ececec;
+
+  /* поверхности */
+  --color-surface-sunken: #141414;
+  --color-surface: #171717;
+  --color-surface-panel: #1c1c1c;
+  --color-surface-card: #212121;
+  --color-surface-elevated: #262626;
+  --color-surface-hover: #303030;
+  --color-surface-active: #333333;
+  --color-surface-accent: #18231c;
+
+  /* границы */
+  --color-border-faint: #262626;
+  --color-border-subtle: #2b2b2b;
+  --color-border-strong: #333333;
+  --color-border-input: #383838;
+  --color-border-hover: #444444;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-surface);
+  color: var(--color-primary);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--color-accent-500);
+    outline-offset: 2px;
+  }
+}
