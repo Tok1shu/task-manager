@@ -1,4 +1,4 @@
-from django.db.models import Case, F, IntegerField, Value, When
+from django.db.models import Case, Count, F, IntegerField, Value, When
 from django.http import Http404
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
@@ -10,28 +10,25 @@ from .models import Task
 from .serializers import TaskCreateSerializer, TaskSerializer, TaskStatusSerializer
 
 
+PRIORITY_WEIGHT = Case(
+    When(priority=Task.PRIORITY_LOW, then=Value(1)),
+    When(priority=Task.PRIORITY_MEDIUM, then=Value(2)),
+    When(priority=Task.PRIORITY_HIGH, then=Value(3)),
+    default=Value(2),
+    output_field=IntegerField(),
+)
+
+
 def apply_task_ordering(queryset, ordering_param):
     if ordering_param == 'priority':
-        return queryset.annotate(
-            priority_weight=Case(
-                When(priority=Task.PRIORITY_LOW, then=Value(1)),
-                When(priority=Task.PRIORITY_MEDIUM, then=Value(2)),
-                When(priority=Task.PRIORITY_HIGH, then=Value(3)),
-                default=Value(2),
-                output_field=IntegerField(),
-            )
-        ).order_by('priority_weight', '-created_at')
+        return queryset.annotate(priority_weight=PRIORITY_WEIGHT).order_by(
+            'priority_weight', '-created_at'
+        )
 
     if ordering_param == '-priority':
-        return queryset.annotate(
-            priority_weight=Case(
-                When(priority=Task.PRIORITY_LOW, then=Value(1)),
-                When(priority=Task.PRIORITY_MEDIUM, then=Value(2)),
-                When(priority=Task.PRIORITY_HIGH, then=Value(3)),
-                default=Value(2),
-                output_field=IntegerField(),
-            )
-        ).order_by('-priority_weight', '-created_at')
+        return queryset.annotate(priority_weight=PRIORITY_WEIGHT).order_by(
+            '-priority_weight', '-created_at'
+        )
 
     if ordering_param == 'due_date':
         return queryset.order_by(F('due_date').asc(nulls_last=True), '-created_at')
@@ -72,6 +69,7 @@ def get_task_for_user(task_id, user):
         task = (
             Task.objects.select_related('project', 'project__owner', 'author', 'assignee')
             .prefetch_related('project__members')
+            .annotate(comments_count=Count('comments'))
             .get(pk=task_id)
         )
     except (Task.DoesNotExist, ValueError):
@@ -87,8 +85,10 @@ def get_task_for_user(task_id, user):
 class ProjectTaskListCreateView(APIView):
     def get(self, request, project_id, **kwargs):
         project = get_project_for_user(project_id, request.user)
-        tasks = Task.objects.filter(project=project).select_related(
-            'project', 'project__owner', 'author', 'assignee'
+        tasks = (
+            Task.objects.filter(project=project)
+            .select_related('project', 'project__owner', 'author', 'assignee')
+            .annotate(comments_count=Count('comments'))
         )
         tasks = apply_task_filters(tasks, request.query_params)
         tasks = apply_task_ordering(tasks, request.query_params.get('ordering', '-created_at'))

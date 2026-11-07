@@ -1,4 +1,3 @@
-from django.apps import apps
 from django.contrib.auth import get_user_model
 from django.db.models import Count, Q
 from django.http import Http404
@@ -42,6 +41,7 @@ class ProjectListCreateView(APIView):
             .distinct()
             .select_related('owner')
             .prefetch_related('members')
+            .annotate(tasks_count=Count('tasks', distinct=True))
             .order_by('-created_at')
         )
         paginator = PageNumberPagination()
@@ -87,25 +87,10 @@ class ProjectDetailView(APIView):
 class ProjectStatsView(APIView):
     def get(self, request, project_id, **kwargs):
         project = get_project_for_user(project_id, request.user)
-        try:
-            task_model = apps.get_model('tasks', 'Task')
-        except (LookupError, ValueError):
-            task_model = None
-
-        if task_model is None or not hasattr(task_model, 'objects'):
-            return Response(
-                {
-                    'total': 0,
-                    'todo': 0,
-                    'in_progress': 0,
-                    'done': 0,
-                    'overdue': 0,
-                    'done_percent': 0.0,
-                }
-            )
+        from tasks.models import Task
 
         today = timezone.localdate()
-        stats = task_model.objects.filter(project=project).aggregate(
+        stats = Task.objects.filter(project=project).aggregate(
             total=Count('id'),
             todo=Count('id', filter=Q(status='todo')),
             in_progress=Count('id', filter=Q(status='in_progress')),
@@ -161,13 +146,9 @@ class MemberRemoveView(APIView):
         if membership is None:
             return Response({'detail': 'Участник не найден'}, status=status.HTTP_404_NOT_FOUND)
 
-        try:
-            task_model = apps.get_model('tasks', 'Task')
-        except (LookupError, ValueError):
-            task_model = None
+        from tasks.models import Task
 
-        if task_model is not None and hasattr(task_model, 'objects'):
-            task_model.objects.filter(project=project, assignee_id=user_id).update(assignee=None)
+        Task.objects.filter(project=project, assignee_id=user_id).update(assignee=None)
 
         membership.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

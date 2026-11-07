@@ -50,6 +50,9 @@ class ProjectListSerializer(serializers.ModelSerializer):
         return len([m for m in obj.members.all() if m.id != obj.owner_id]) + 1
 
     def get_tasks_count(self, obj):
+        count = getattr(obj, 'tasks_count', None)
+        if count is not None:
+            return count
         if hasattr(obj, 'tasks'):
             return obj.tasks.count()
         return 0

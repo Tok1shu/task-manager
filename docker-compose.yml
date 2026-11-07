@@ -33,7 +33,7 @@ services:
     profiles: ["frontend"]
     environment:
       # 1 — эмулятор бэкенда из frontend/mock; 0 — проксировать /api на сервис backend
-      MOCK_API: ${MOCK_API:-1}
+      MOCK_API: ${MOCK_API:-0}
       API_PROXY_TARGET: http://backend:8000
     volumes:
       - ./frontend:/app

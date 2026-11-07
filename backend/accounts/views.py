@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.contrib.auth import authenticate
-from django.db.models import Q
+from django.db.models import Count, Q
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.pagination import PageNumberPagination
@@ -135,10 +135,14 @@ class MyTasksView(APIView):
             Q(owner=request.user) | Q(members=request.user)
         ).values_list('id', flat=True)
 
-        tasks = Task.objects.filter(
-            assignee=request.user,
-            project_id__in=user_projects,
-        ).select_related('project', 'author', 'assignee')
+        tasks = (
+            Task.objects.filter(
+                assignee=request.user,
+                project_id__in=user_projects,
+            )
+            .select_related('project', 'author', 'assignee')
+            .annotate(comments_count=Count('comments'))
+        )
 
         tasks = apply_task_filters(tasks, request.query_params)
         tasks = apply_task_ordering(tasks, request.query_params.get('ordering', '-created_at'))

@@ -4,8 +4,8 @@ import react from "@vitejs/plugin-react"
 import tailwindcss from "@tailwindcss/vite"
 import { mockApi } from "./mock/plugin.ts"
 
-// MOCK_API=0 отключает эмулятор и проксирует /api на настоящий бэкенд (API_PROXY_TARGET).
-const useMock = process.env.MOCK_API !== "0"
+// MOCK_API=1 включает эмулятор бэкенда из frontend/mock; по умолчанию /api проксируется на настоящий бэкенд (API_PROXY_TARGET).
+const useMock = process.env.MOCK_API === "1"
 const apiTarget = process.env.API_PROXY_TARGET ?? "http://localhost:8000"
 
 export default defineConfig({

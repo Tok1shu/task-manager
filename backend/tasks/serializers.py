@@ -63,6 +63,9 @@ class TaskSerializer(serializers.ModelSerializer):
         return obj.due_date < timezone.localdate()
 
     def get_comments_count(self, obj):
+        count = getattr(obj, 'comments_count', None)
+        if count is not None:
+            return count
         if hasattr(obj, 'comments'):
             return obj.comments.count()
         return 0
